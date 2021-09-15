@@ -8,3 +8,8 @@ def index(request):
         "entries": util.list_entries()
     })
 
+def query(request, word):
+    return render(request, "encyclopedia/query.html", {
+        "querySearch": util.get_entry(word),
+        "word": word
+    })
