@@ -1,10 +1,15 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    {{word}}
+    Wiki: {{word}}
 {% endblock%}
 
 {% block body %}
-    Hello, {{word}}
+    {% if not querySearch %}
+        <h1>Page not found... </h1><br><h2>Sorry, it seems that there is no wikipage yet for the word "{{ word }}" that you are looking for. 
+            Think about creating one!</h2>
+    {% else %}
+        {{ querySearch }}
+    {% endif %}
 
 {% endblock%}
