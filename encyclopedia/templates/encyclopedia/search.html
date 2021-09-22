@@ -1,9 +1,22 @@
-{% extends "layout.html"%}
+{% extends "encyclopedia/layout.html"%}
 
 {% block title%}
-    {{}}
+    {{ word }}
 {% endblock %}
 
 {% block body %}
+    <h1>All Pages</h1>  
     
+    {% if querySearch %}
+        {{ querySearch }}
+    {% else %}
+        <ul>
+            {% for key, value in capitalize.items %}
+                {% if compare_word in value %}
+                    <li><a href="{{ key }}">{{ key }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
 {% endblock %}
