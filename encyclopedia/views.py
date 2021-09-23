@@ -5,6 +5,11 @@ from django.urls import reverse
 
 from . import util
 
+class NewPageForm(forms.Form):
+    title = forms.CharField(label='', widget=forms.TextInput(attrs={'placeholder': 'title'}))
+    message = forms.CharField(label='', widget=forms.Textarea(attrs={'placeholder': 'Your entry here...'}))
+
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -45,3 +50,8 @@ def search(request):
             "compare_word": compare_word,
             "capitalize": capitalize
         })
+
+def newPage(request):
+    return render(request, "encyclopedia/newPage.html", {
+        "form": NewPageForm
+    })
