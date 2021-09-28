@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  background-color: white;
+}
+
+code {
+  white-space: pre;
+}
+
+h1 {
+  margin-top: 0px;
+  padding-top: 20px;
+}
+
+textarea {
+  height: 30vh;
+  width: 100%;
+}
+
+.sizeform {
+  width: 100%;
+}
+
+.main {
+  padding: 10px;
+}
+
+.search {
+  width: 100%;
+  font-size: 15px;
+  line-height: 15px;
+}
+
+.sidebar {
+  background-color: #f0f0f0;
+  height: 100vh;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-top: 5px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 100%;
+  max-width: 1000px;
+  min-width: 200px;
+  max-height: 500px;
+}
+
+.size {
+  max-width: 90%;
+  max-height: 600px;
+}
+
+h3 {
+  max-height: 50px;
+  text-align: left;
+  vertical-align: middle;
+  min-height: 42px;
+}
+
+.button {
+  max-width: 10%;
+  height: 42px;
+  text-align: center;
+  border-radius: 15px;
+  background-color: #1e90ff;
+  border: 1px solid #000;
+  font-size: 24px;
+  font-family: arial;
+  color: white;
+}
+.button:hover {
+  box-shadow: 2px 2px 2px 2px #888888;
+}
+
+/*# sourceMappingURL=styles2.css.map */
