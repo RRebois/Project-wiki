@@ -5,17 +5,35 @@
 {% endblock %}
 
 {% block body %} 
+
+
+    <div class="messages" id="messages-list">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}
+                    <div style="width: 1000px; margin: 0 auto;" class="alert alert-{{ message.tags }} msg fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="width: 1000px; margin: 0 auto;" class="alert alert-danger msg fade show" role="alert">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
     <h1>Create a new entry</h1> 
     <br>
     <div class="size">
         <form action="{% url 'encyclopedia:newPage' %}" method="POST">
             {% csrf_token %}
             <div class="grid">
-                <div class="grid-item1">
-                    {{form}}
-                </div>
-                <input type="submit">
+                {% for field in form %} <!-- To iterate through the form NewPageForm-->
+                    <h3>{{ field.label_tag }}</h3>
+                        <span>{{ field }}</span>              
+                {% endfor %}
+                <input class="button" type="submit" name="save" value="Save">
             </div>
         </form>
     </div>
 {% endblock %}
+    

@@ -5,11 +5,28 @@
 {% endblock%}
 
 {% block body %}
+    <div class="messages" id="messages-list">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}
+                    <div style="width: 1000px; margin: 0 auto;" class="alert alert-{{ message.tags }} msg fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="width: 1000px; margin: 0 auto;" class="alert alert-danger msg fade show" role="alert">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+
     {% if not querySearch %}
         <h1>Page not found... </h1><br><h2>Sorry, it seems that there is no wikipage yet for the word "{{ word }}" that you are looking for. 
             Think about creating one!</h2>
     {% else %}
         {{ querySearch }}
     {% endif %}
+
+    
 
 {% endblock%}

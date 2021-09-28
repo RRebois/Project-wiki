@@ -5,6 +5,23 @@
 {% endblock %}
 
 {% block body %}
+    <!--<div class="messages" id="messages-list">
+        {% if messages %}
+            {% for message in messages %}
+            <li>
+                {% if message.tags %}
+                     <div style="width: 1000px; margin: 0 auto;" class="alert alert-{{ message.tags }} msg fade show" role="alert">{{ message }}</div>
+                {% else %}
+                    <div class="alert alert-info msg fade show" role="alert">{{ message }}</div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        {% endif %}
+                </div>-->
+
+
+
+
     <h1>All Pages</h1>  
     
     {% if querySearch %}
