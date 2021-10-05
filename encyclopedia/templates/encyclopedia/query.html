@@ -19,14 +19,22 @@
         {% endif %}
     </div>
 
-
-    {% if not querySearch %}
-        <h1>Page not found... </h1><br><h2>Sorry, it seems that there is no wikipage yet for the word "{{ word }}" that you are looking for. 
-            Think about creating one!</h2>
-    {% else %}
-        {{ querySearch }}
-    {% endif %}
-
-    
+        {% if not querySearch %}
+            <form action="{% url 'encyclopedia:newPage' %}">
+                {% csrf_token %}
+                <h1>Page not found... </h1><br><h2>Sorry, it seems that there is no wikipage yet for the word "{{ word }}" that you are looking for. 
+                    Think about creating one!</h2>
+                </br>
+                    <button style="margin-top: 15px;"type="submit" class="btn btn-primary">Create a new entry</button>
+            </form>
+        {% else %}
+            <form action="{% url 'encyclopedia:editPage' %}" method="POST">
+                {% csrf_token %}
+                {{ querySearch|safe }}
+                </br>
+                <input type ="hidden" value="{{ word }}" id="word" name="word">
+                <button style="margin-top: 15px;"type="submit" class="btn btn-primary">Edit</button>
+            </form>
+        {% endif %}
 
 {% endblock%}

@@ -17,13 +17,13 @@
                     <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
                 </form>
                 <div>
-                    <a href="{% url 'encyclopedia:index' %}"">Home</a>
+                    <a href="{% url 'encyclopedia:index' %}">Home</a>
                 </div>
                 <div>
                     <a href="{% url 'encyclopedia:newPage' %}">Create New Page</a>
                 </div>
                 <div>
-                    <a>Random Page</a>
+                    <a href="{% url 'encyclopedia:query' random %}">Random Page</a> <!--passing the arg random to the url-->
                 </div>
                 {% block nav %}
                 {% endblock %}

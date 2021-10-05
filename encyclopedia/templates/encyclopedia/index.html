@@ -5,6 +5,20 @@
 {% endblock %}
 
 {% block body %}
+    <div class="messages" id="messages-list">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}
+                    <div style="width: 1000px; margin: 0 auto;" class="alert alert-{{ message.tags }} msg fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="width: 1000px; margin: 0 auto;" class="alert alert-danger msg fade show" role="alert">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
     <h1>All Pages</h1>
 
     <ul>

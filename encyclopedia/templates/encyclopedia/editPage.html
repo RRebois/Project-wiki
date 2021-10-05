@@ -1,0 +1,41 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    edit {{title}} page
+{% endblock %}
+
+{% block body%}
+    <div class="messages" id="messages-list">
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}
+                    <div style="width: 1000px; margin: 0 auto;" class=" alert alert-{{ message.tags }} msg fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div style="width: 1000px; margin: 0 auto;" class=" alert alert-danger msg fade show" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <h1>Edit "{{title}}" entry:</h1>
+    </br>
+
+    <div class="size">
+        <form action="{% url 'encyclopedia:saveEdit' %}" method="POST">
+            {% csrf_token %}
+           
+                <h3>Title:</h4>
+                    <input type='text' disabled='True' value="{{ title }}">
+                    <input type ="hidden" value="{{ title }}" id="title" name="title">
+                    </br>
+                <h3>content:</h3>
+                    <textarea name='content'>{{ content }}</textarea>             
+            
+            <input class="btn btn-primary" type='submit' name="save" value='Save'>
+        </form>
+    </div>
+{% endblock %}
