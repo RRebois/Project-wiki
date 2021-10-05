@@ -13,35 +13,40 @@ class NewPageForm(forms.Form):
     title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'placeholder': 'title', 'class': 'sizeform'}))
     content = forms.CharField(label='Description', widget=forms.Textarea(attrs={'placeholder': 'Your description here...'}))
 
-def index(request):
-    entries = util.list_entries()
-    random = secrets.choice(entries)
-    return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries(),
-        "random": random
-    })
+# Creates a function that creates some variables of use along the doc:
 
-def query(request, word):
+def function():
     Entries = util.list_entries() # that will remain has it has been saved...
+    entries = util.list_entries() # and this that will be converted to lowercase to be compared to 'word'
     random = secrets.choice(Entries)
-
-    compare_word = word.lower()
-    #print(f"{compare_word}")
-    entries = util.list_entries() # will be converted to lowercase to be compared to 'word'
 
     for i in range(len(entries)):
         entries[i] = entries[i].lower()
 
     # Creates an empty dictionary called capitalize to associated the capitalized word associated to its lowercase version
-        capitalize = {}
-        for x in range(len(entries)):
-            capitalize[Entries[x]] = entries[x]
-
+    capitalize = {}
+    for x in range(len(entries)):
+        capitalize[Entries[x]] = entries[x]
     
-    if compare_word in entries:
-        j = entries.index(compare_word)
-        word = Entries[j]
-        print(f"{word}")
+    return [Entries, entries, random, capitalize]
+
+def index(request):
+    values = function()
+    #print(f"{values[0]}")
+    #print(f"{values[2]}")
+    return render(request, "encyclopedia/index.html", {
+        "entries": values[0],
+        "random": values[2]
+    })
+
+def query(request, word):
+    values = function()
+    compare_word = word.lower()
+    
+    if compare_word in values[1]:
+        j = values[1].index(compare_word)
+        word = values[0][j]
+        #print(f"{word}")
         querySearch = markdown2.markdown(util.get_entry(word))
     else:
         querySearch = None
@@ -49,11 +54,12 @@ def query(request, word):
     return render(request, "encyclopedia/query.html", { 
         "querySearch": querySearch,
         "word": word, # word is capitalized
-        "capitalize": capitalize,
-        "random": random
+        "capitalize": values[3],
+        "random": values[2]
     })
 
 def search(request):
+    values = function()
     if request.method == "POST":
         # get the input 'q' from the user from the form in layout.html
         word = request.POST.get('q')
@@ -61,60 +67,47 @@ def search(request):
         if word == '':
             danger = 50
             return HttpResponseRedirect(reverse("encyclopedia:index"), {
-                "message": messages.add_message(request, danger, 'Not a valid search. Try again with a valid word')
+                "message": messages.add_message(request, danger, 'Not a valid search.')
             })
 
         # convert the word into lower case
         compare_word = word.lower()
-
-        # Creates 2 variables:
-        Entries = util.list_entries() # that will remain has it has been saved...
-        entries = util.list_entries() # and this that will be converted to lowercase to be compared to 'word'
-        random = secrets.choice(entries)
-
-        for i in range(len(entries)):
-            entries[i] = entries[i].lower()
-
-        # Creates an empty dictionary called capitalize to associated the capitalized word associated to its lowercase version
-        capitalize = {}
-        for x in range(len(entries)):
-            capitalize[Entries[x]] = entries[x]
         
         # use as a check
         # print(f"{capitalize}")
 
-        if compare_word in entries:
-            j = entries.index(compare_word)
-            word = Entries[j]
+        if compare_word in values[1]:
+            j = values[1].index(compare_word)
+            word = values[0][j]
             querySearch = markdown2.markdown(util.get_entry(word))
         else:
             querySearch = None
 
         return render(request, "encyclopedia/search.html", {
             "querySearch": querySearch,
-            "Entries": Entries,
+            "Entries": values[0],
             "word": word, 
-            "random": random,
+            "random": values[2],
             "compare_word": compare_word,
-            "capitalize": capitalize
+            "capitalize": values[3]
         })
     else:
         return redirect("encyclopedia:index")
 
 def newPage(request):
+    values = function()
     if request.method == "POST":
-        title = request.POST.get('title').capitalize()
+        title = request.POST.get('title')
+        titleLower = title.lower()
         content = request.POST.get('content')
 
         danger = 50
-        compareTitles = util.list_entries()
-        random = secrets.choice(compareTitles)
 
-        if title in compareTitles:
+        if titleLower in values[1]:
             return render(request, "encyclopedia/newPage.html", {
                 "form": NewPageForm,
                 "message": messages.add_message(request, danger, 'Error: an entry with the same name already exists. Cannot overrride data. Entry not saved.'),
-                "random": random
+                "random": values[2]
             })
 
         else:
@@ -124,25 +117,22 @@ def newPage(request):
             # use HttpResponseRedirect instead of redirect to also redirect the flash message.
             # args=(title,) allows to pass the title parameter to the query view to open the new page correctly
 
-    entries = util.list_entries()
-    random = secrets.choice(entries)
     return render(request, "encyclopedia/newPage.html", {
         "form": NewPageForm,
-        "random": random
+        "random": values[2]
     })
 
 def editPage(request):
+    values = function()
     if request.method == "POST":
         title = request.POST.get('word')
         content = util.get_entry(title)
-        entries = util.list_entries()
-        random = secrets.choice(entries)
 
         #print(f"title sent is:{title}")
         return render(request, "encyclopedia/editPage.html", {
             "title": title,
             "content": content,
-            "random": random
+            "random": values[2]
         })
 
 def saveEdit(request):
@@ -150,9 +140,6 @@ def saveEdit(request):
 
         title = request.POST.get('title')
         content = request.POST.get('content')
-        #if title.is_valid() == False or content.is_valid() == False:
-         #   return render(request)
-        #print(f"title={title}, content={content}")
 
         util.save_entry(title,content)
         messages.add_message(request, messages.SUCCESS, 'Entry successfully saved. Thank you for your contribution!!')
