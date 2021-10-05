@@ -1,3 +1,3 @@
 # Rolando
 
-Name of the awesome programmer of this wiki!
+Name of the <s>awesome</s> ***bad*** programmer of this wiki!
